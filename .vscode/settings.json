@@ -1,0 +1,14 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.test.config": [
+        {
+            "name": "Chromium visible",
+            "vmArgs": [
+                "-Dplaywright.headless=false"
+            ]
+        }
+    ],
+    "java.test.defaultConfig": "Chromium visible",
+    "java.debug.settings.onBuildFailureProceed": true
+
+}

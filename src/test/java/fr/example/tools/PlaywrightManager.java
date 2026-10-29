@@ -6,6 +6,8 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 
+import java.util.List;
+
 public final class PlaywrightManager {
     private static final double DEFAULT_TIMEOUT_MS = 60_000;
     private static volatile Session session;
@@ -57,10 +59,18 @@ public final class PlaywrightManager {
             Browser createdBrowser = null;
             BrowserContext createdContext = null;
             try {
-                boolean headless = Boolean.parseBoolean(System.getProperty("playwright.headless", "true"));
+                boolean headless = Boolean.parseBoolean(System.getProperty("playwright.headless", "false"));
                 createdBrowser = playwright.chromium().launch(
-                        new BrowserType.LaunchOptions().setHeadless(headless));
-                createdContext = createdBrowser.newContext();
+                    new BrowserType.LaunchOptions()
+                        .setHeadless(headless)
+                        .setArgs(List.of("--start-maximized")));
+                createdContext = createdBrowser.newContext(
+                    new Browser.NewContextOptions().setViewportSize(null));
+                createdContext.addInitScript("""
+                    document.addEventListener('DOMContentLoaded', () => {
+                        document.documentElement.style.zoom = '80%';
+                    }, { once: true });
+                    """);
                 createdContext.setDefaultTimeout(DEFAULT_TIMEOUT_MS);
                 createdContext.setDefaultNavigationTimeout(DEFAULT_TIMEOUT_MS);
                 browser = createdBrowser;

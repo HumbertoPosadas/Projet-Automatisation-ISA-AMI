@@ -15,18 +15,12 @@ import fr.example.tools.TestLoggingExtension;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 
-import fr.example.pages.AdministrationPage;
-import fr.example.pages.ConnexionPage;
-import fr.example.pages.GestionDossiersPage;
-import fr.example.pages.PageObjectManager;
+import fr.example.pages.*;
 import fr.example.tools.EnvConfig;
 import fr.example.tools.PlaywrightExtension;
-import fr.example.tools.TestIdExtractor;
-import fr.example.tools.TestLoggingExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,9 +29,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PublicationDossier {
 
-    private static final Path LOG_FILE = Path.of("target", "test-results", "testids.log");
     private static final String codeDossier = "TEST01";
     private static Boolean isAmiActivated = false;
+    Screen screen = HelperTools.getScreen();
 
     @Test
     @Order(1)
@@ -47,7 +41,9 @@ class PublicationDossier {
         ConnexionPage.connexionUtilisateur(
                 EnvConfig.get("USER_ADMIN_USERNAME"),
                 EnvConfig.get("USER_ADMIN_PASSWORD"));
-        page.waitForURL("**/dashboard");
+        page.waitForURL("**/dashboard"); 
+        // assertion qui verifie que l'utilisateur admin se trouve dans le tableau de bord
+        assertTrue(page.url().contains("/dashboard"), "L'utilisateur admin n'est pas sur le tableau de bord.");
 
 
         PageObjectManager.getBasePage().naviguerVers("https://preprod.ami-compta.fr/#/admin");
@@ -65,7 +61,6 @@ class PublicationDossier {
 
     }
 
-    Screen screen = HelperTools.getScreen();
 
     @Test
     @Order(2)

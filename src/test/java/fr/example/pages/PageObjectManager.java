@@ -9,6 +9,7 @@ public final class PageObjectManager {
     private static ConnexionPage connexionPage;
     private static AccueilPage accueilPage;
     private static GestionDossiersPage gestionDossiersPage;
+    private static AccountingPage accountingPage;
 
     private PageObjectManager() {
     }
@@ -21,6 +22,7 @@ public final class PageObjectManager {
             connexionPage = new ConnexionPage(currentPage);
             accueilPage = new AccueilPage(currentPage);
             gestionDossiersPage = new GestionDossiersPage(currentPage);
+            accountingPage = new AccountingPage(currentPage);
         }
         return connexionPage;
     }
@@ -33,6 +35,7 @@ public final class PageObjectManager {
             connexionPage = new ConnexionPage(currentPage);
             accueilPage = new AccueilPage(currentPage);
             gestionDossiersPage = new GestionDossiersPage(currentPage);
+            accountingPage = new AccountingPage(currentPage);
         }
         return basePage;
     }
@@ -45,6 +48,7 @@ public final class PageObjectManager {
             connexionPage = new ConnexionPage(currentPage);
             accueilPage = new AccueilPage(currentPage);
             gestionDossiersPage = new GestionDossiersPage(currentPage);
+            accountingPage = new AccountingPage(currentPage);
         }
         return accueilPage;
     }
@@ -57,7 +61,21 @@ public final class PageObjectManager {
             connexionPage = new ConnexionPage(currentPage);
             accueilPage = new AccueilPage(currentPage);
             gestionDossiersPage = new GestionDossiersPage(currentPage);
+            accountingPage = new AccountingPage(currentPage);
         }
         return gestionDossiersPage;
+    }
+
+    public static synchronized AccountingPage getAccountingPage() {
+        Page currentPage = PlaywrightManager.getPage();
+        if (accountingPage == null || page != currentPage) {
+            page = currentPage;
+            basePage = new BasePage(currentPage);
+            connexionPage = new ConnexionPage(currentPage);
+            accueilPage = new AccueilPage(currentPage);
+            gestionDossiersPage = new GestionDossiersPage(currentPage);
+            accountingPage = new AccountingPage(currentPage);
+        }
+        return accountingPage;
     }
 }

@@ -53,7 +53,7 @@ public class SikuliHelperTools {
         }
     }
 
-    public static void desactiverAmiComptaDansDossier() throws FindFailed, InterruptedException {
+    public static int desactiverAmiComptaDansDossier() throws FindFailed, InterruptedException {
         // Méthode qui va desactiver la case a cocher Dossier lié avec Ami cOmpta dans la GI.
         // Cette méthode part du principe que l'utilisateur se trouve dans l'accueil du dossier dans ISACOMPTA
         TestExecutionLog.action("Désactivation de l'option AMI Compta dans le dossier.");
@@ -76,6 +76,7 @@ public class SikuliHelperTools {
 
             HelperTools.waitFor(5, java.util.concurrent.TimeUnit.SECONDS);
             TestExecutionLog.result("L'option AMI Compta a été désactivée dans le dossier.");
+            return 1;
         } catch (FindFailed | RuntimeException e) {
             TestExecutionLog.failure("La désactivation de l'option AMI Compta a échoué.", e);
             throw e;

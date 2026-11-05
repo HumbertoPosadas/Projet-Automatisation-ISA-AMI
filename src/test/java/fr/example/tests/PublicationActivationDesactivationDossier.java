@@ -1,3 +1,9 @@
+/** 
+ * Ce test correspond à l'automatisation du test "Publication d'un nouveau dossier" dans AMI Compta.
+ * 
+ * Le dossier STEST01.SVG contient la sauvegarde du dossier avant la premiere publication vers Ami Compta.
+ */
+
 package fr.example.tests;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +24,7 @@ import com.microsoft.playwright.options.LoadState;
 import fr.example.pages.*;
 import fr.example.tools.EnvConfig;
 import fr.example.tools.PlaywrightExtension;
-import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.nio.file.Path;
@@ -27,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith({PlaywrightExtension.class, TestLoggingExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PublicationDossier {
+class PublicationActivationDesactivationDossier {
 
     private static final String codeDossier = "TEST01";
     private static Boolean isAmiActivated = false;
@@ -44,21 +50,17 @@ class PublicationDossier {
         page.waitForURL("**/dashboard"); 
         // assertion qui verifie que l'utilisateur admin se trouve dans le tableau de bord
         assertTrue(page.url().contains("/dashboard"), "L'utilisateur admin n'est pas sur le tableau de bord.");
-
-
         PageObjectManager.getBasePage().naviguerVers("https://preprod.ami-compta.fr/#/admin");
         page.waitForURL("**/admin");
         //attendre le chargement complet de la page
         page.waitForLoadState(LoadState.NETWORKIDLE);
         page.getByTestId(AdministrationPage.ADMIN_FOLDERS_BTN).click();
         page.waitForURL("**/folders");
-
-
         GestionDossiersPage.chercherDossier(codeDossier);
         int dossiersTrouves = GestionDossiersPage.compteurDossiersListe();
 
+        // Verifications
         assertEquals(0, dossiersTrouves, "Le dossier " + codeDossier + " a été trouvé avant sa publication");
-
     }
 
 
@@ -67,15 +69,14 @@ class PublicationDossier {
     void remonterLeDossier() throws FindFailed {
         // Copie du fichier dans le dossier ZZ
         String fileName = "STEST01.SVG";
-        int isFileCopied = FileTools.copieFile(FileTools.DOSSIER_ORIGIN + fileName, FileTools.DOSSIER_ZZ);
-        assertTrue(isFileCopied == 1,"Le fichier doit être copié dans le dossier ZZ.");
-        
+        int isFileCopied = FileTools.copieFile(FileTools.DOSSIER_ORIGIN + fileName, FileTools.DOSSIER_ZZ);     
         // Lancement de l'application ISACOMPTA avec authentification et ouverture du dossier
         int isIsacomptaCompletLaunched = SikuliLaunchTools.lancementComptaComplet("ADMACON", "Pa$$w0rd", codeDossier, 540);
         HelperTools.waitFor(5, TimeUnit.SECONDS);
 
+        //Verifications
+        assertTrue(isFileCopied == 1,"Le fichier doit être copié dans le dossier ZZ.");
         assertTrue(isIsacomptaCompletLaunched == 1, "L'application ISACOMPTA n'a pas été lancée avec succès, l'authentification a échoué ou le dossier n'a pas été ouvert.");
-
     }   
 
     @Test 
@@ -95,6 +96,8 @@ class PublicationDossier {
         if (activationResult == 1 || activationResult == 2){
             isAmiActivated = true;
         }
+
+        // Verifications
         assertTrue(activationResult == 1 || activationResult == 2, "L'activation de l'option AMI Compta n'a pas été effectuée avec succès.");
         assertTrue(isAmiActivated,"Ami Compta n'a pas été activé sur le dossier de test");
     }
@@ -109,6 +112,8 @@ class PublicationDossier {
         // Fermeture de l'application ISACOMPTA CONNECT
         SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4");
         screen.type(Key.F4, KeyModifier.ALT);
+
+        // Verifications
         assertTrue(publicationResult == 1, "La publication du dossier vers AMI Compta n'a pas été effectuée avec succès.");
         assertTrue(isAmiActivated,"Ami Compta n'a pas été activé sur le dossier de test");
     }
@@ -130,13 +135,11 @@ class PublicationDossier {
         page.waitForLoadState(LoadState.NETWORKIDLE);
         page.getByTestId(AdministrationPage.ADMIN_FOLDERS_BTN).click();
         page.waitForURL("**/folders");
-
-
         GestionDossiersPage.chercherDossier(codeDossier);
         int dossiersTrouves = GestionDossiersPage.compteurDossiersListe();
 
+        // Verifications
         assertEquals(1, dossiersTrouves, "Le dossier " + codeDossier + " n'a pas été trouvé après sa publication");
-
     }
 
     @Test 
@@ -144,13 +147,14 @@ class PublicationDossier {
     void desactiverAMIdansDossier() throws Exception {
         int isIsacomptaCompletLaunched = SikuliLaunchTools.lancementComptaComplet("ADMACON", "Pa$$w0rd", codeDossier, 540);
         HelperTools.waitFor(5, TimeUnit.SECONDS);
-
-        SikuliHelperTools.desactiverAmiComptaDansDossier();
+        int desactivationResult = SikuliHelperTools.desactiverAmiComptaDansDossier();
         HelperTools.waitFor(10, TimeUnit.SECONDS);
-
         SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA,"Fermeture de l'application ISACOMPTA CONNECT");
         screen.type(Key.F4, KeyModifier.ALT);
 
+        // Verifications
+        assertTrue(desactivationResult == 1, "La désactivation de l'option AMI Compta n'a pas été effectuée avec succès.");
+        assertTrue(isIsacomptaCompletLaunched == 1, "L'application ISACOMPTA n'a pas été lancée avec succès.");
     }
 
     @Test @Order(7)
@@ -168,13 +172,11 @@ class PublicationDossier {
         page.waitForLoadState(LoadState.NETWORKIDLE);
         page.getByTestId(AdministrationPage.ADMIN_FOLDERS_BTN).click();
         page.waitForURL("**/folders");
-
-
         GestionDossiersPage.chercherDossier(codeDossier);
         int dossiersTrouves = GestionDossiersPage.compteurDossiersListe();
 
+        // Verifications
         assertEquals(0, dossiersTrouves, "Le dossier " + codeDossier + " a été trouvé avant sa publication");
-
     }
 
 }

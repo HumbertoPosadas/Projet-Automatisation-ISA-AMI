@@ -102,6 +102,7 @@ public class AccountingPage extends BasePage {
         public static final String PCI_FOLDER_SELECTOR_INPUT = "pci-folder-selector-input";
         public static final String PCI_FOLDER_SELECTOR_ROW = "pci-folder-selector-row";
         public static final String INVOICE_DETAIL_TVA_CODE_SELECTOR_INPUT = "tva-code-selector-input";
+        public static final String JOURNAL_SELECTOR = "journal-selector-input";
         public static final String folderSearchbox = "input.p-select-filter[role='searchbox']";
 
 
@@ -171,6 +172,37 @@ public class AccountingPage extends BasePage {
         } else {
                 return 0; // Non trouvé
         }
+        }
+
+        // Methode pour chercher un Journal
+        public static int chercherJournal(String journal, String libelleJournal) {
+
+                AccountingPage accountingPage = PageObjectManager.getAccountingPage();
+
+                // Cliquer sur le premier selecteur journal
+                accountingPage.executerAction("AccountingPage.chercherJournal : cliquer sur le selecteur journal.",
+                        () -> accountingPage.page.getByTestId(INVOICE_EDIT_JOURNAL_SELECTOR).first().click());
+
+                // Remplir le champ de recherche du journal
+                accountingPage.executerAction("AccountingPage.chercherJournal : remplir le champ de recherche du journal.",
+                        () -> accountingPage.page.getByTestId(JOURNAL_SELECTOR)
+                                .pressSequentially(journal, new Locator.PressSequentiallyOptions().setDelay(500)));
+
+                // attendre 2 secondes avant de chercher les correspondances
+                accountingPage.page.waitForTimeout(2000);
+
+                // filtrer les options de la liste par son code et libellé
+                Locator elementsTrouves = accountingPage.page.locator("li[role='option']")
+                        .filter(new Locator.FilterOptions().setHasText(journal))
+                        .filter(new Locator.FilterOptions().setHasText(libelleJournal));
+
+                if (elementsTrouves.count() > 0) {
+                        accountingPage.executerAction("AccountingPage.chercherJournal : cliquer sur la ligne du journal trouvée.",
+                                () -> elementsTrouves.first().click());
+                        return 1; // Trouvé et cliqué
+                } else {
+                        return 0; // Non trouvé
+                }
         }
 
 

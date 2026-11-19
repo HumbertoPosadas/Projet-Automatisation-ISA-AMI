@@ -22,26 +22,35 @@ public class SikuliHelperTools {
         // Si la methode retourne 2 : l'option AMI Compta a été activée avec succès par la methode
         TestExecutionLog.action("Activation de l'option AMI Compta dans le dossier.");
         try {
-            clickWithLog(IsacomptaImages.CO_BOUTON_ECHANGES, "Ouverture du menu Échanges");
+                clickWithLog(IsacomptaImages.CO_BOUTON_ECHANGES, "Ouverture du menu Échanges",
+                    IsacomptaImages.CO_BOUTON_ECHANGES_2);
 
-            if (HelperTools.waitForImage(IsacomptaImages.CO_BTN_AMI_COMPTA, 3)) {
+                if (HelperTools.waitForAnyImage(3, IsacomptaImages.CO_BTN_AMI_COMPTA,
+                    IsacomptaImages.CO_BTN_AMI_COMPTA2)) {
                 TestExecutionLog.result("Le bouton AMI Compta est déjà présent ; aucune activation n'est nécessaire.");
                 return 1;
             }
 
-            clickWithLog(IsacomptaImages.CO_BOUTON_FICHE_CLIENT, "Ouverture de la fiche client");
-            HelperTools.waitForImageOrFail(IsacomptaImages.GI_COMPTABILITE, 60);
+                clickWithLog(IsacomptaImages.CO_BOUTON_FICHE_CLIENT, "Ouverture de la fiche client",
+                    IsacomptaImages.CO_BOUTON_FICHE_CLIENT_2);
+                HelperTools.waitForAnyImageOrFail(60, IsacomptaImages.GI_COMPTABILITE,
+                    IsacomptaImages.GI_COMPTABILITE_2);
             //Wait de 5 secondes pour s'assurer que la section Comptabilité est bien chargée
             HelperTools.waitFor(5, TimeUnit.SECONDS);
-            clickWithLog(IsacomptaImages.GI_COMPTABILITE, "Ouverture de la section Comptabilité");
-            clickWithLog(IsacomptaImages.GI_OPTION_AMI_COMPTA_NOT_ACTIVATED, "Activation de l'option AMI Compta");
-            HelperTools.waitForImageOrFail(IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION, 30);
-            clickWithLog(IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION, "Confirmation de l'activation AMI Compta");
+                clickWithLog(IsacomptaImages.GI_COMPTABILITE, "Ouverture de la section Comptabilité",
+                    IsacomptaImages.GI_COMPTABILITE_2);
+                clickWithLog(IsacomptaImages.GI_OPTION_AMI_COMPTA_NOT_ACTIVATED, "Activation de l'option AMI Compta",
+                    IsacomptaImages.GI_OPTION_AMI_COMPTA_NOT_ACTIVATED_2);
+                HelperTools.waitForAnyImageOrFail(30, IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION,
+                    IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION_2);
+                clickWithLog(IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION, "Confirmation de l'activation AMI Compta",
+                    IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION_2);
             // taper sur enter pour valider la confirmation
             typeWithLog(Key.ENTER, "Validation de la confirmation par Enter");
             TestExecutionLog.result("L'option AMI Compta a été activée et la confirmation a été validée par Enter.");
             // Fermer ISAGI pour revenir à ISACOMPTA CONNECT
-            clickWithLog(IsacomptaImages.GI_ICONE_ISAGI, "Fermeture de l'application ISAGI par raccourci Alt+F4");
+                clickWithLog(IsacomptaImages.GI_ICONE_ISAGI, "Fermeture de l'application ISAGI par raccourci Alt+F4",
+                    IsacomptaImages.GI_ICONE_ISAGI_2);
             typeWithLog(Key.F4, KeyModifier.ALT, "Fermeture d'ISAGI par Alt+F4");
             return 2;
         } catch (FindFailed e) {
@@ -58,20 +67,28 @@ public class SikuliHelperTools {
         // Cette méthode part du principe que l'utilisateur se trouve dans l'accueil du dossier dans ISACOMPTA
         TestExecutionLog.action("Désactivation de l'option AMI Compta dans le dossier.");
         try {
-            clickWithLog(IsacomptaImages.CO_BOUTON_FICHE_CLIENT, "Ouverture de la fiche client");
-            HelperTools.waitForImageOrFail(IsacomptaImages.GI_COMPTABILITE, 60);
+                clickWithLog(IsacomptaImages.CO_BOUTON_FICHE_CLIENT, "Ouverture de la fiche client",
+                    IsacomptaImages.CO_BOUTON_FICHE_CLIENT_2);
+                HelperTools.waitForAnyImageOrFail(60, IsacomptaImages.GI_COMPTABILITE,
+                    IsacomptaImages.GI_COMPTABILITE_2);
             // Attendre un court instant pour s'assurer que la section Comptabilité est bien visible
             HelperTools.waitFor(5, TimeUnit.SECONDS);
-            clickWithLog(IsacomptaImages.GI_COMPTABILITE, "Ouverture de la section Comptabilité");
-            HelperTools.waitForImageOrFail(IsacomptaImages.GI_OPTION_AMI_COMPTA_ACTIVATED, 20);
-            clickWithLog(IsacomptaImages.GI_OPTION_AMI_COMPTA_ACTIVATED, "Désactivation de l'option AMI Compta");
-            HelperTools.waitForImageOrFail(IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION, 30);
-            clickWithLog(IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION, "Confirmation de la désactivation AMI Compta");
+                clickWithLog(IsacomptaImages.GI_COMPTABILITE, "Ouverture de la section Comptabilité",
+                    IsacomptaImages.GI_COMPTABILITE_2);
+                HelperTools.waitForAnyImageOrFail(20, IsacomptaImages.GI_OPTION_AMI_COMPTA_ACTIVATED,
+                    IsacomptaImages.GI_OPTION_AMI_COMPTA_ACTIVATED_2);
+                clickWithLog(IsacomptaImages.GI_OPTION_AMI_COMPTA_ACTIVATED, "Désactivation de l'option AMI Compta",
+                    IsacomptaImages.GI_OPTION_AMI_COMPTA_ACTIVATED_2);
+                HelperTools.waitForAnyImageOrFail(30, IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION,
+                    IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION_2);
+                clickWithLog(IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION, "Confirmation de la désactivation AMI Compta",
+                    IsacomptaImages.GI_OPTION_AMI_COMPTA_CONFIRMATION_2);
             // taper sur enter pour valider la confirmation
             typeWithLog(Key.ENTER, "Validation de la confirmation par Enter");
             HelperTools.waitFor(5, java.util.concurrent.TimeUnit.SECONDS);
 
-            clickWithLog(IsacomptaImages.GI_ICONE_ISAGI, "Fermeture de l'application ISAGI par raccourci Alt+F4");
+                clickWithLog(IsacomptaImages.GI_ICONE_ISAGI, "Fermeture de l'application ISAGI par raccourci Alt+F4",
+                    IsacomptaImages.GI_ICONE_ISAGI_2);
             typeWithLog(Key.F4, KeyModifier.ALT, "Fermeture d'ISAGI par Alt+F4");
 
             HelperTools.waitFor(5, java.util.concurrent.TimeUnit.SECONDS);
@@ -84,11 +101,16 @@ public class SikuliHelperTools {
     }
 
     public static int publierLeDossierVersAmi() throws FindFailed {
-        clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Cliquer sur l'icône ISACOMPTA pour ouvrir liberer le ruban si jamais le regroupement était cliqué");
-        clickWithLog(IsacomptaImages.CO_BOUTON_ECHANGES, "Ouverture du menu Échanges");
-        clickWithLog(IsacomptaImages.CO_BTN_AMI_COMPTA, "Cliquer sur le bouton AMI Compta pour chercher l'option de publication");
-        clickWithLog(IsacomptaImages.CO_PUBLICATION_PARAMETRAGE_VERS_AMI_COMPTA, "Cliquer sur le bouton Publier le paramétrage vers AMI Compta");
-        Match detailTraitement = HelperTools.waitForImageOrFail(IsacomptaImages.CO_DETAIL_TRAITEMENT_TITRE, 60);
+        clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Cliquer sur l'icône ISACOMPTA pour ouvrir liberer le ruban si jamais le regroupement était cliqué",
+            IsacomptaImages.CO_ICONE_ISACOMPTA_2);
+        clickWithLog(IsacomptaImages.CO_BOUTON_ECHANGES, "Ouverture du menu Échanges",
+            IsacomptaImages.CO_BOUTON_ECHANGES_2);
+        clickWithLog(IsacomptaImages.CO_BTN_AMI_COMPTA, "Cliquer sur le bouton AMI Compta pour chercher l'option de publication",
+            IsacomptaImages.CO_BTN_AMI_COMPTA2);
+        clickWithLog(IsacomptaImages.CO_PUBLICATION_PARAMETRAGE_VERS_AMI_COMPTA, "Cliquer sur le bouton Publier le paramétrage vers AMI Compta",
+            IsacomptaImages.CO_PUBLICATION_PARAMETRAGE_VERS_AMI_COMPTA_2);
+        Match detailTraitement = HelperTools.waitForAnyImageOrFail(60,
+            IsacomptaImages.CO_DETAIL_TRAITEMENT_TITRE, IsacomptaImages.CO_DETAIL_TRAITEMENT_TITRE_2);
         if(detailTraitement != null) {
             TestExecutionLog.result("Le détail du traitement est affiché, la publication est en cours.");
         } else {
@@ -96,10 +118,12 @@ public class SikuliHelperTools {
             TestExecutionLog.failure("Le détail du traitement n'a pas été trouvé, la publication a échoué.", failure);
             throw failure;
         }
-        Match statutRapportTermine = HelperTools.waitForImageOrFail(IsacomptaImages.CO_STATUT_RAPPORT_TERMINE, 120);
+        Match statutRapportTermine = HelperTools.waitForAnyImageOrFail(120,
+            IsacomptaImages.CO_STATUT_RAPPORT_TERMINE, IsacomptaImages.CO_STATUT_RAPPORT_TERMINE_2);
         if(statutRapportTermine != null) {
             TestExecutionLog.result("La publication du dossier vers AMI Compta est terminée.");
-            clickWithLog(IsacomptaImages.CO_DETAIL_TRAITEMENT_TITRE, "Fermeture du détail du traitement par click sur le titre + alt+F4");
+                clickWithLog(IsacomptaImages.CO_DETAIL_TRAITEMENT_TITRE, "Fermeture du détail du traitement par click sur le titre + alt+F4",
+                    IsacomptaImages.CO_DETAIL_TRAITEMENT_TITRE_2);
             typeWithLog(Key.F4, KeyModifier.ALT, "Fermeture du détail du traitement par Alt+F4");
             TestExecutionLog.result("Le détail du traitement a été fermé avec succès.");
             return 1;
@@ -126,18 +150,32 @@ public class SikuliHelperTools {
         }
     }
 
-    public static void clickWithLog(Pattern target, String description) throws FindFailed {
+    public static void clickWithLog(Pattern target, String description, Pattern... alternatives) throws FindFailed {
         TestExecutionLog.action(description + ".");
         try {
-            screen.click(target);
-            TestExecutionLog.result(description + " : action réussie.");
-        } catch (FindFailed e) {
-            TestExecutionLog.failure(description + " : image cible introuvable, action échouée.", e);
-            throw e;
+            FindFailed lastFailure = null;
+            for (Pattern candidate : prepend(target, alternatives)) {
+                try {
+                    screen.click(candidate);
+                    TestExecutionLog.result(description + " : action réussie avec l'image " + candidate + ".");
+                    return;
+                } catch (FindFailed e) {
+                    lastFailure = e;
+                }
+            }
+            TestExecutionLog.failure(description + " : aucune image cible trouvée, action échouée.", lastFailure);
+            throw lastFailure;
         } catch (RuntimeException e) {
             TestExecutionLog.failure(description + " : action échouée.", e);
             throw e;
         }
+    }
+
+    private static Pattern[] prepend(Pattern target, Pattern[] alternatives) {
+        Pattern[] candidates = new Pattern[alternatives.length + 1];
+        candidates[0] = target;
+        System.arraycopy(alternatives, 0, candidates, 1, alternatives.length);
+        return candidates;
     }
 
 

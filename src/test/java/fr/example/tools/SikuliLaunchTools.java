@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import fr.example.tools.sikuliimages.IsacomptaImages;
 import org.sikuli.script.FindFailed;
@@ -20,14 +21,18 @@ public class SikuliLaunchTools {
 
 
     public static int lancementCompta(int timeoutInSeconds) {      
+        if (timeoutInSeconds < 0) {
+            throw new IllegalArgumentException("Le délai d'attente doit être positif ou nul.");
+        }
         TestExecutionLog.action("LaunchTools.lancementCompta : démarrage d'ISACOMPTA.");
         //lancement de l'application
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(isacomptaAppPath);
             Process process = processBuilder.start();
             TestExecutionLog.result("Processus ISACOMPTA démarré (PID " + process.pid() + ").");
-            boolean authenticationScreenFound =
-                    HelperTools.waitForImage(IsacomptaImages.AUTHENTIFICATION_SCREEN, timeoutInSeconds);
+                boolean authenticationScreenFound = HelperTools.waitForAnyImage(timeoutInSeconds,
+                    IsacomptaImages.AUTHENTIFICATION_SCREEN,
+                    IsacomptaImages.AUTHENTIFICATION_SCREEN_2);
             TestExecutionLog.result("Écran d'authentification ISACOMPTA détecté : " + authenticationScreenFound);
             if (authenticationScreenFound) {
                 TestExecutionLog.result("lancementCompta retourne 1.");
@@ -59,10 +64,11 @@ public class SikuliLaunchTools {
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();
             TestExecutionLog.result("Processus ISACOMPTA démarré (PID " + process.pid() + ").");
-            boolean companyListFound =
-                    HelperTools.waitForImage(IsacomptaImages.CO_LISTE_DES_ENTREPRISES_TITRE, timeoutInSeconds);
-            TestExecutionLog.result("Écran de liste des entreprises détecté : " + companyListFound);
-            if (companyListFound) {
+                boolean companyListDetected = HelperTools.waitForAnyImage(timeoutInSeconds,
+                    IsacomptaImages.CO_LISTE_DES_ENTREPRISES_TITRE,
+                    IsacomptaImages.CO_LISTE_DES_ENTREPRISES_TITRE_2);
+                TestExecutionLog.result("Écran de liste des entreprises détecté : " + companyListDetected);
+            if (companyListDetected) {
                 TestExecutionLog.result("lancementComptaAuthentification retourne 1.");
                 System.out.println("L'application ISACOMPTA a été lancée avec succès et l'authentification a réussi.");
                 return 1;
@@ -95,7 +101,9 @@ public class SikuliLaunchTools {
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();
             TestExecutionLog.result("Processus ISACOMPTA démarré (PID " + process.pid() + ").");
-            boolean openButtonFound = waitForExpectedScreen(IsacomptaImages.CO_BOUTON_OUVRIR, timeout);
+                boolean openButtonFound = waitForExpectedScreen(timeout,
+                    IsacomptaImages.CO_BOUTON_OUVRIR,
+                    IsacomptaImages.CO_BOUTON_OUVRIR_2);
             TestExecutionLog.result("Bouton d'ouverture du dossier détecté : " + openButtonFound);
             if (openButtonFound) {
                 TestExecutionLog.result("lancementComptaComplet retourne 1.");
@@ -119,8 +127,9 @@ public class SikuliLaunchTools {
             ProcessBuilder processBuilder = new ProcessBuilder(isagiAppPath);
             Process process = processBuilder.start();
             TestExecutionLog.result("Processus ISAGI démarré (PID " + process.pid() + ").");
-            boolean authenticationScreenFound =
-                    HelperTools.waitForImage(IsacomptaImages.AUTHENTIFICATION_SCREEN, 30);
+                boolean authenticationScreenFound = HelperTools.waitForAnyImage(30,
+                    IsacomptaImages.AUTHENTIFICATION_SCREEN,
+                    IsacomptaImages.AUTHENTIFICATION_SCREEN_2);
             TestExecutionLog.result("Écran d'authentification ISAGI détecté : " + authenticationScreenFound);
             if (authenticationScreenFound) {
                 TestExecutionLog.result("lancementGi retourne 1.");
@@ -154,8 +163,9 @@ public class SikuliLaunchTools {
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();
             TestExecutionLog.result("Processus ISAGI démarré (PID " + process.pid() + ").");
-            boolean saveButtonFound =
-                    HelperTools.waitForImage(IsacomptaImages.GI_BOUTON_SAUVEGARDER, timeoutInSeconds);
+                boolean saveButtonFound = HelperTools.waitForAnyImage(timeoutInSeconds,
+                    IsacomptaImages.GI_BOUTON_SAUVEGARDER,
+                    IsacomptaImages.GI_BOUTON_SAUVEGARDER_2);
             TestExecutionLog.result("Bouton de sauvegarde ISAGI détecté : " + saveButtonFound);
             if (saveButtonFound) {
                 TestExecutionLog.result("lancementGiAuthentification retourne 1.");
@@ -174,7 +184,7 @@ public class SikuliLaunchTools {
         }
     }
 
-    private static boolean waitForExpectedScreen(Pattern expectedScreen, int timeoutInSeconds) {
+    private static boolean waitForExpectedScreen(int timeoutInSeconds, Pattern... expectedScreens) {
         if (timeoutInSeconds < 0) {
             throw new IllegalArgumentException("Le délai d'attente ne peut pas être négatif.");
         }
@@ -208,11 +218,11 @@ public class SikuliLaunchTools {
 
             long remainingNanos = deadline - System.nanoTime();
             if (remainingNanos <= 0) {
-                return HelperTools.waitForImage(expectedScreen, 0);
+                return HelperTools.waitForAnyImage(0, expectedScreens);
             }
 
             double pollSeconds = Math.min(0.25, remainingNanos / 1_000_000_000.0);
-            if (HelperTools.waitForImage(expectedScreen, pollSeconds)) {
+            if (HelperTools.waitForAnyImage(pollSeconds, expectedScreens)) {
                 return true;
             }
         }

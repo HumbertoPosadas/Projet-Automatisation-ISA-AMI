@@ -6,7 +6,14 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 public final class PlaywrightManager {
     private static final double DEFAULT_TIMEOUT_MS = 60_000;
@@ -52,25 +59,27 @@ public final class PlaywrightManager {
         private final Browser browser;
         private final BrowserContext context;
         private final Page page;
+        private final Path videoDir;
+        private boolean testFailed;
 
         private Session() {
             TestExecutionLog.action("Démarrage de la session Playwright.");
             playwright = Playwright.create();
             Browser createdBrowser = null;
             BrowserContext createdContext = null;
+            videoDir = Path.of("target", "test-results", "playwright-videos", UUID.randomUUID().toString());
             try {
+                Files.createDirectories(videoDir);
                 boolean headless = Boolean.parseBoolean(System.getProperty("playwright.headless", "false"));
                 createdBrowser = playwright.chromium().launch(
                     new BrowserType.LaunchOptions()
                         .setHeadless(headless)
-                        .setArgs(List.of("--start-maximized")));
+                        .setArgs(List.of("--start-maximized", "--force-device-scale-factor=0.8")));
                 createdContext = createdBrowser.newContext(
-                    new Browser.NewContextOptions().setViewportSize(null));
-                createdContext.addInitScript("""
-                    document.addEventListener('DOMContentLoaded', () => {
-                        document.documentElement.style.zoom = '80%';
-                    }, { once: true });
-                    """);
+                    new Browser.NewContextOptions()
+                        .setViewportSize(null)
+                        .setRecordVideoDir(videoDir)
+                        .setRecordVideoSize(1280, 720));
                 createdContext.setDefaultTimeout(DEFAULT_TIMEOUT_MS);
                 createdContext.setDefaultNavigationTimeout(DEFAULT_TIMEOUT_MS);
                 browser = createdBrowser;
@@ -81,7 +90,16 @@ public final class PlaywrightManager {
                 TestExecutionLog.failure("Le démarrage de la session Playwright a échoué.", e);
                 closeAfterInitializationFailure(createdContext, createdBrowser, playwright, e);
                 throw e;
+            } catch (IOException e) {
+                RuntimeException error = new UncheckedIOException("Impossible de préparer le dossier vidéo Playwright.", e);
+                TestExecutionLog.failure("Le démarrage de la session Playwright a échoué.", error);
+                closeAfterInitializationFailure(createdContext, createdBrowser, playwright, error);
+                throw error;
             }
+        }
+
+        void markTestFailed(boolean failed) {
+            testFailed |= failed;
         }
 
         @Override
@@ -94,12 +112,27 @@ public final class PlaywrightManager {
                     browser.close();
                 } finally {
                     playwright.close();
+                    if (!testFailed) {
+                        deleteVideoDirectory(videoDir);
+                    } else {
+                        TestExecutionLog.result("Vidéo Playwright conservée après échec : " + videoDir);
+                    }
                     synchronized (PlaywrightManager.class) {
                         if (session == this) {
                             session = null;
                         }
                     }
                 }
+            }
+        }
+
+        private static void deleteVideoDirectory(Path directory) {
+            try (Stream<Path> paths = Files.walk(directory)) {
+                for (Path path : paths.sorted(Comparator.reverseOrder()).toList()) {
+                    Files.deleteIfExists(path);
+                }
+            } catch (IOException e) {
+                throw new UncheckedIOException("Impossible de supprimer les vidéos Playwright d'un test réussi.", e);
             }
         }
 

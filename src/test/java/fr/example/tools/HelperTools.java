@@ -53,6 +53,53 @@ public final class HelperTools {
         }
     }
 
+    public static boolean waitForAnyImage(double timeoutInSeconds, Pattern... images) {
+        validateImageWaits(images, timeoutInSeconds);
+        TestExecutionLog.action("Recherche de l'une des images Sikuli (timeout : "
+                + timeoutInSeconds + " s).");
+        long deadline = System.nanoTime() + (long) (timeoutInSeconds * TimeUnit.SECONDS.toNanos(1));
+        while (true) {
+            for (Pattern image : images) {
+                if (SCREEN.exists(image, 0) != null) {
+                    TestExecutionLog.result("Image Sikuli trouvée : " + image);
+                    return true;
+                }
+            }
+
+            long remainingNanos = deadline - System.nanoTime();
+            if (remainingNanos <= 0) {
+                TestExecutionLog.result("Aucune image Sikuli trouvée après " + timeoutInSeconds + " s.");
+                return false;
+            }
+            waitFor(Math.min(TimeUnit.MILLISECONDS.toNanos(250), remainingNanos), TimeUnit.NANOSECONDS);
+        }
+    }
+
+    public static Match waitForAnyImageOrFail(double timeoutInSeconds, Pattern... images) throws FindFailed {
+        validateImageWaits(images, timeoutInSeconds);
+        TestExecutionLog.action("Attente obligatoire de l'une des images Sikuli (timeout : "
+                + timeoutInSeconds + " s).");
+        long deadline = System.nanoTime() + (long) (timeoutInSeconds * TimeUnit.SECONDS.toNanos(1));
+        while (true) {
+            for (Pattern image : images) {
+                Match match = SCREEN.exists(image, 0);
+                if (match != null) {
+                    TestExecutionLog.result("Image Sikuli trouvée : " + image);
+                    return match;
+                }
+            }
+
+            long remainingNanos = deadline - System.nanoTime();
+            if (remainingNanos <= 0) {
+                FindFailed failure = new FindFailed("Aucune des images Sikuli attendues n'a été trouvée.");
+                TestExecutionLog.failure("Aucune image Sikuli attendue n'a été trouvée après "
+                        + timeoutInSeconds + " s.", failure);
+                throw failure;
+            }
+            waitFor(Math.min(TimeUnit.MILLISECONDS.toNanos(250), remainingNanos), TimeUnit.NANOSECONDS);
+        }
+    }
+
     public static Match waitForImageOrFail(Pattern image, double timeoutInSeconds) throws FindFailed {
         validateImageWait(image, timeoutInSeconds);
         TestExecutionLog.action("Attente obligatoire de l'image Sikuli " + image + " (timeout : "
@@ -84,6 +131,19 @@ public final class HelperTools {
 
     private static void validateImageWait(Pattern image, double timeoutInSeconds) {
         Objects.requireNonNull(image, "L'image Sikuli ne peut pas être nulle.");
+        if (!Double.isFinite(timeoutInSeconds) || timeoutInSeconds < 0) {
+            throw new IllegalArgumentException("Le délai d'attente doit être positif ou nul.");
+        }
+    }
+
+    private static void validateImageWaits(Pattern[] images, double timeoutInSeconds) {
+        Objects.requireNonNull(images, "La liste d'images Sikuli ne peut pas être nulle.");
+        if (images.length == 0) {
+            throw new IllegalArgumentException("Au moins une image Sikuli doit être fournie.");
+        }
+        for (Pattern image : images) {
+            Objects.requireNonNull(image, "L'image Sikuli ne peut pas être nulle.");
+        }
         if (!Double.isFinite(timeoutInSeconds) || timeoutInSeconds < 0) {
             throw new IllegalArgumentException("Le délai d'attente doit être positif ou nul.");
         }

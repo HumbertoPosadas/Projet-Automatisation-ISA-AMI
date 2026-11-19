@@ -79,7 +79,8 @@ class SynchroPartielle2 {
         // L'utilisateur se trouve à l'accuei du dossier dans ISACOMPTA CONNECT, l'option AMI Compta est activée, il faut publier le dossier
         int publicationResult = SikuliHelperTools.publierLeDossierVersAmi();
         // Fermeture de l'application ISACOMPTA CONNECT
-        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4");
+        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4",
+            IsacomptaImages.CO_ICONE_ISACOMPTA_2);
         screen.type(Key.F4, KeyModifier.ALT);
 
         // Verifications
@@ -153,7 +154,8 @@ class SynchroPartielle2 {
         // L'utilisateur se trouve à l'accuei du dossier dans ISACOMPTA CONNECT, l'option AMI Compta est activée, il faut publier le dossier
         int publicationResult = SikuliHelperTools.publierLeDossierVersAmi();
         // Fermeture de l'application ISACOMPTA CONNECT
-        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4");
+        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4",
+            IsacomptaImages.CO_ICONE_ISACOMPTA_2);
         screen.type(Key.F4, KeyModifier.ALT);
 
         // Verifications
@@ -227,7 +229,8 @@ class SynchroPartielle2 {
         // L'utilisateur se trouve à l'accuei du dossier dans ISACOMPTA CONNECT, l'option AMI Compta est activée, il faut publier le dossier
         int publicationResult = SikuliHelperTools.publierLeDossierVersAmi();
         // Fermeture de l'application ISACOMPTA CONNECT
-        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4");
+        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4",
+            IsacomptaImages.CO_ICONE_ISACOMPTA_2);
         screen.type(Key.F4, KeyModifier.ALT);
 
         // Verifications

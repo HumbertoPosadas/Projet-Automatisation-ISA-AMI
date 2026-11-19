@@ -85,7 +85,8 @@ class PublicationActivationDesactivationDossier {
         // L'utilisateur se trouve à l'accuei du dossier dans ISACOMPTA CONNECT, il faut activer l'option AMI Compta dans le dossier si jamais elle n'est pas actvée
         int activationResult = SikuliHelperTools.activerAmiComptaDansDossier();
         if (activationResult == 2) {
-            SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Retour à ISACOMPTA");
+                SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Retour à ISACOMPTA",
+                    IsacomptaImages.CO_ICONE_ISACOMPTA_2);
             screen.type(Key.F4, KeyModifier.ALT);
             HelperTools.waitFor(20, TimeUnit.SECONDS);
 
@@ -110,7 +111,8 @@ class PublicationActivationDesactivationDossier {
         if (publicationResult == 1) {isAmiActivated = true;}
 
         // Fermeture de l'application ISACOMPTA CONNECT
-        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4");
+        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA, "Fermeture de l'application ISACOMPTA CONNECT par click sur l'icône + alt+F4",
+            IsacomptaImages.CO_ICONE_ISACOMPTA_2);
         screen.type(Key.F4, KeyModifier.ALT);
 
         // Verifications
@@ -149,7 +151,8 @@ class PublicationActivationDesactivationDossier {
         HelperTools.waitFor(5, TimeUnit.SECONDS);
         int desactivationResult = SikuliHelperTools.desactiverAmiComptaDansDossier();
         HelperTools.waitFor(10, TimeUnit.SECONDS);
-        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA,"Fermeture de l'application ISACOMPTA CONNECT");
+        SikuliHelperTools.clickWithLog(IsacomptaImages.CO_ICONE_ISACOMPTA,"Fermeture de l'application ISACOMPTA CONNECT",
+            IsacomptaImages.CO_ICONE_ISACOMPTA_2);
         screen.type(Key.F4, KeyModifier.ALT);
 
         // Verifications

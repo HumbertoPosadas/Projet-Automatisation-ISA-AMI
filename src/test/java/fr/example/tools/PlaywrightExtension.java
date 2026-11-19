@@ -4,14 +4,27 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
-public final class PlaywrightExtension implements ParameterResolver {
+public final class PlaywrightExtension
+    implements ParameterResolver, AfterTestExecutionCallback, AfterEachCallback {
     private static final ExtensionContext.Namespace NAMESPACE =
             ExtensionContext.Namespace.create(PlaywrightExtension.class);
     private static final String SESSION = "session";
+
+    @Override
+    public void afterTestExecution(ExtensionContext context) {
+        updateTestOutcome(context);
+    }
+
+    @Override
+    public void afterEach(ExtensionContext context) {
+        updateTestOutcome(context);
+    }
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
@@ -43,5 +56,13 @@ public final class PlaywrightExtension implements ParameterResolver {
         }
 
         throw new IllegalArgumentException("Type de paramètre Playwright non pris en charge : " + parameterType);
+    }
+
+    private static void updateTestOutcome(ExtensionContext context) {
+        PlaywrightManager.Session session = context.getStore(NAMESPACE).get(SESSION,
+                PlaywrightManager.Session.class);
+        if (session != null) {
+            session.markTestFailed(context.getExecutionException().isPresent());
+        }
     }
 }

@@ -27,27 +27,44 @@ public final class IsacomptaImages {
     //--------------------------- Images ISACOMPTA CONNECT ---------------------------
 
     public static final Pattern CO_ICONE_ISACOMPTA = loadPattern("co_isacompta_logo1.png").similar(0.90);
+    public static final Pattern CO_ICONE_ISACOMPTA_2 = loadPattern("co_isacompta_logo2.png").similar(0.90);
     public static final Pattern AUTHENTIFICATION_SCREEN = loadPattern("Authentification1.png").similar(0.89);
+    public static final Pattern AUTHENTIFICATION_SCREEN_2 = loadPattern("Authentification2.png").similar(0.90);
     public static final Pattern CO_LISTE_DES_ENTREPRISES_TITRE =loadPattern("Liste_des_entreprises_title1.png").similar(0.92);
+    public static final Pattern CO_LISTE_DES_ENTREPRISES_TITRE_2 =loadPattern("Liste_des_entreprises_title2.png").similar(0.90);
     public static final Pattern CO_BOUTON_OUVRIR = loadPattern("Bouton_Ouvrir.png").similar(0.92);
+    public static final Pattern CO_BOUTON_OUVRIR_2 = loadPattern("Bouton_Ouvrir2.png").similar(0.90);
     public static final Pattern CO_DOSSIER_EN_COPIE = loadPattern("co_copie_du_dossier.png").similar(0.89);
     public static final Pattern CO_CONFIRMATION_MODALE_TITLE = loadPattern("co_confirmation_modale.png").similar(0.90);
     public static final Pattern CO_BOUTON_FICHE_CLIENT = loadPattern("co_btn_fiche_client1.png").similar(0.92);
+    public static final Pattern CO_BOUTON_FICHE_CLIENT_2 = loadPattern("co_btn_fiche_client2.png").similar(0.90);
     public static final Pattern CO_BOUTON_ECHANGES = loadPattern("co_btn_echanges1.png").similar(0.90);
+    public static final Pattern CO_BOUTON_ECHANGES_2 = loadPattern("co_btn_echanges2.png").similar(0.90);
     public static final Pattern CO_BTN_AMI_COMPTA = loadPattern("co_btn_ami_compta1.png").similar(0.90);
+    public static final Pattern CO_BTN_AMI_COMPTA2 = loadPattern("co_btn_ami_compta2.png").similar(0.90);
     public static final Pattern CO_PUBLICATION_PARAMETRAGE_VERS_AMI_COMPTA = loadPattern("co_publier_paramettrage_ami_compta1.png").similar(0.90);
+    public static final Pattern CO_PUBLICATION_PARAMETRAGE_VERS_AMI_COMPTA_2 = loadPattern("co_publier_paramettrage_ami_compta2.png").similar(0.90);
     public static final Pattern CO_DETAIL_TRAITEMENT_TITRE = loadPattern("co_detail_traitement_titre1.png").similar(0.90);
+    public static final Pattern CO_DETAIL_TRAITEMENT_TITRE_2 = loadPattern("co_detail_traitement_titre2.png").similar(0.90);
     public static final Pattern CO_STATUT_RAPPORT_TERMINE = loadPattern("co_statut_rapport_termine1.png").similar(0.90);
+    public static final Pattern CO_STATUT_RAPPORT_TERMINE_2 = loadPattern("co_statut_rapport_termine2.png").similar(0.90);
 
 
     //--------------------------- Images ISAGI CONNECT ---------------------------
     public static final Pattern GI_ICONE_ISAGI = loadPattern("gi-icone_isagi1.png").similar(0.92);
+    public static final Pattern GI_ICONE_ISAGI_2 = loadPattern("gi-icone_isagi2.png").similar(0.90);
     public static final Pattern GI_BOUTON_SAUVEGARDER = loadPattern("gi_bouton_sauvegarder1.png").similar(0.90);
+    public static final Pattern GI_BOUTON_SAUVEGARDER_2 = loadPattern("gi_bouton_sauvegarder2.png").similar(0.90);
     public static final Pattern GI_ONGLET_SAISIE_CLIENTS = loadPattern("gi_saisie_client1.png").similar(0.92);
+    public static final Pattern GI_ONGLET_SAISIE_CLIENTS_2 = loadPattern("gi_saisie_client2.png").similar(0.90);
     public static final Pattern GI_COMPTABILITE = loadPattern("gi_option_comptabilité.png").similar(0.93);
+    public static final Pattern GI_COMPTABILITE_2 = loadPattern("gi_option_comptabilité2.png").similar(0.90);
     public static final Pattern GI_OPTION_AMI_COMPTA_ACTIVATED = loadPattern("gi_dlaac_activated1.png").similar(0.92);
+    public static final Pattern GI_OPTION_AMI_COMPTA_ACTIVATED_2 = loadPattern("gi_dlaac_activated2.png").similar(0.90);
     public static final Pattern GI_OPTION_AMI_COMPTA_NOT_ACTIVATED = loadPattern("gi_dlaac_desactivated.png").similar(0.92);
+    public static final Pattern GI_OPTION_AMI_COMPTA_NOT_ACTIVATED_2 = loadPattern("gi_dlaac_desactivated2.png").similar(0.90);
     public static final Pattern GI_OPTION_AMI_COMPTA_CONFIRMATION = loadPattern("gi_modale_information1.png").similar(0.88);
+    public static final Pattern GI_OPTION_AMI_COMPTA_CONFIRMATION_2 = loadPattern("gi_modale_information2.png").similar(0.90);
 }
 
 
